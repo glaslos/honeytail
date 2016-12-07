@@ -1,0 +1,2 @@
+# honeytail
+tail honeypot logs
