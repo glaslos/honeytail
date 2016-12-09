@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/a8m/kinesis-producer"
 	"github.com/hpcloud/tail"
 )
 
@@ -21,7 +20,7 @@ var (
 	awssecret  string
 )
 
-func process(pr *producer.Producer) {
+func process() {
 	t, err := tail.TailFile(fileName,
 		tail.Config{
 			Follow: followFile,
@@ -55,6 +54,5 @@ func main() {
 	flag.IntVar(&fileWhence, "file-whence", 2, "0: start, 1: current, 2:end")
 	flag.Parse()
 
-	//pr.Start()
-	//process(pr)
+	process()
 }
