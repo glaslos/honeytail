@@ -7,10 +7,6 @@ import (
 	"os"
 
 	"github.com/a8m/kinesis-producer"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/kinesis"
 	"github.com/hpcloud/tail"
 )
 
@@ -42,10 +38,6 @@ func process(pr *producer.Producer) {
 	for line := range t.Lines {
 		// Process log line
 		fmt.Println(line.Text)
-		err := pr.Put([]byte(line.Text), shardName)
-		if err != nil {
-			log.Println(err)
-		}
 	}
 }
 
@@ -62,22 +54,7 @@ func main() {
 	flag.BoolVar(&reopenFile, "reopen-file", true, "Re-open the file if renamed (logrotate)")
 	flag.IntVar(&fileWhence, "file-whence", 2, "0: start, 1: current, 2:end")
 	flag.Parse()
-	creds := credentials.NewStaticCredentials(awskey, awssecret, "")
-	_, err := creds.Get()
-	if err != nil {
-		log.Println("Failed to create credentials", err.Error())
-	}
-	awsConfig := &aws.Config{
-		Region:      aws.String("eu-west-1"),
-		Credentials: creds,
-	}
-	client := kinesis.New(session.New(awsConfig))
-	pr := producer.New(&producer.Config{
-		StreamName:   streamName,
-		BacklogCount: 2000,
-		Client:       client,
-	})
 
-	pr.Start()
-	process(pr)
+	//pr.Start()
+	//process(pr)
 }
